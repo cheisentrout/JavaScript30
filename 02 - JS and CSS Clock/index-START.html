@@ -9,6 +9,8 @@
 
     <div class="clock">
       <div class="clock-face">
+        <!-- You can assign multiple classes to an HTML element, separated only
+        by a space? -->
         <div class="hand hour-hand"></div>
         <div class="hand min-hand"></div>
         <div class="hand second-hand"></div>
@@ -62,12 +64,57 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform: rotate(90deg); /* REFERENCED IN JS COMMENT - This rotates the clock's hands to default to "12:00", or at a 90degree angle to the x-axis <div>s default to. */
+      transform-origin: 100%; /* This changes the point in the <div> at which the angle begins. If it were set to 50%, two of the clock's hands would cross *halfway* through their length. This means "start the angle at the right-most corner of the div".*/
+      transition: all 0.05s; /* This transition property affects how quickly the clock's hands will move/rotate once we add JS*/
+      transition-timing-function: cubic-bezier(0.1, 2.77, 0.58, 1); /* This adjusts the "springiness" with which the clock hand clicks forward incrementally - gives it a little UPdown feel.*/
     }
 
   </style>
-
+      
   <script>
 
+    //CACHE THE DOM - grab the elements you'll need to access from HTML, and assign them JS variables
+    const secondHand = document.querySelector('.second-hand');
+    const minHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+
+    //BEGIN built-in setDate function
+    function setDate() {
+      //Create a variable for "now" that gets local time info from the computer.
+        const now = new Date();
+        //SECONDS
+        /*Create a variable for seconds by using the built-in getSeconds METHOD,
+        and attaching it to the "now" variable.*/
+        const seconds = now.getSeconds();
+        /*At this point, you start thinking through how you're going to equate
+        a second (numbered 0 - 59) with a degree number in a circle (0 - 360). We
+        can divide the current number of seconds by 60 (for instance, 24seconds / 60seconds
+         = 0.4seconds), and multiply by 360 (144) to get the current degree the second 
+         should be equal to in the circle. THEN we have to add 90degrees to compensate for
+         the rotate(90deg) we added to the default .hand class in CSS.*/
+        const secondsDegrees = ((seconds / 60) * 360) + 90;
+        /* Now we're adding styles to the secondHand variable right inside the JS.
+        Use dot notation to attach properties.*/
+        /* This code below means: "get the secondHand variable, address it's styling,
+        and add the transform property to it. Set the tranform property to rotate the
+        element according to what the secondsDegrees variable is at any given time."*/
+        secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+        
+        //MINUTES
+        const mins = now.getMinutes();
+        const minsDegrees = ((mins / 60) * 360) + 90;
+        minHand.style.transform = `rotate(${minsDegrees}deg)`;
+
+        //HOURS
+        const hour = now.getHours();
+        const hourDegrees = ((hour / 12) * 360) + ((mins/60)*30) + 90; //not understanding this math
+        hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+
+      } //END setDate function
+
+      
+      setInterval(setDate, 1000);
 
   </script>
 </body>
