@@ -73,15 +73,17 @@
       can also apply to the base-color selector, which doesnt have the sizing
       suffix.*/
       const suffix = this.dataset.sizing || '';
+      //What is "documentElement" getting at here? The :root in CSS?
       document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
       
     } 
 
-    /* We'll need to listen for a change event on each of the input
-    variables. Do so by attaching the forEach() method to the inputs
-    variable, then creating an input function (using arrow function syntax)
-    to add an event listener to each input that listens for the change
-    event, and executes the handleUpdate function on each input.*/
+    /* We'll need to listen for an event on each of the input
+    tags, which are all contained within "const input". Do so by attaching 
+    the forEach() method to the inputs variable, then creating an input 
+    function (using arrow function syntax) to add an event listener to each input 
+    that waits for the specified browser event, and executes the handleUpdate 
+    function on each input.*/
     inputs.forEach(input => input.addEventListener('change', handleUpdate));
     /* Now, add basically the same event listener, but change the event
     to "mousemove" - this will update the function whenever the slider
