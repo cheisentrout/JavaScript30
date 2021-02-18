@@ -15,16 +15,33 @@
     <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
-    <input id="base" type="color" name="base" value="#ffc600">
+    <input id="base" type="color" name="base" value="#BF7069">
   </div>
 
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+/* In CSS, for "root" variables, you append the variable to two dashes: -- */
+    :root {
+      --base: #BF7069;
+      --spacing: 10px;
+      --blur: 10px;
+    }
 
-    /*
-      misc styles, nothing to do with CSS variables
-    */
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur)); /* You use "filter" in CSS to apply a
+      blur effect. Here, you apply the blur filter and then set it to be reliant
+      on the CSS variable blur, which will be adjusted through JS. */
+
+    }
+
+    .hl {
+      color: var(--base);
+    }
+
+    /*Below: misc. styles that have nothing to do with CSS variables. */
 
     body {
       text-align: center;
@@ -45,6 +62,31 @@
   </style>
 
   <script>
+    /*Create a variable that grabs all of the <input>s from HTML -
+    these are what will need to update when changes are made in the UI */
+    const inputs = document.querySelectorAll('.controls input');
+    
+    function handleUpdate() {
+      /* Look into "dataset" - built in JS property? "sizing" comes from
+      the HTMl data- suffix inside the <input> tags. You have to also
+      set the suffix variable to contain "or (||) nothing ('')", so that this
+      can also apply to the base-color selector, which doesnt have the sizing
+      suffix.*/
+      const suffix = this.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+      
+    } 
+
+    /* We'll need to listen for a change event on each of the input
+    variables. Do so by attaching the forEach() method to the inputs
+    variable, then creating an input function (using arrow function syntax)
+    to add an event listener to each input that listens for the change
+    event, and executes the handleUpdate function on each input.*/
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    /* Now, add basically the same event listener, but change the event
+    to "mousemove" - this will update the function whenever the slider
+    is moved, not just when it is clicked and released. */
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
   </script>
 
 </body>
