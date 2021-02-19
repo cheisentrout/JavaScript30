@@ -37,29 +37,95 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    // a. Create a variable ("fifteen) for the inventors born in the 1500s
+    /* b. Use the .filter method on your inventors array. The .filter() method
+    loops over your array (of objects/inventors, in this case), and will check
+    for the condition you set within the function. */
+    // c. Put "inventor" as a parameter for the filter function - but where does "inventor" come from??
+    // d. Write an "if" statement that checks the year the inventor was born
+    const fifteen = inventors.filter(inventor => (inventor.year >= 1500 && inventor.year <= 1599))
+            /* if (inventor.year >= 1500 && inventor.year <= 1599);
+            return true; */ /*This is the if statement we refactored using
+            shorthand above */
+    console.table(fifteen);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    const fullNames = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
+    console.log(fullNames);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    /* The array method, .sort(), orders the items in an array by comparing
+    them to one another. You'll need to pass two variables ("a" and "b", in
+    this case), through the function to serve as the two items being compared.
+    If the .year property attached to item a is larger than the .year property
+    attached to item .b, .sort() will "add 1" to the items ordered spot in the array.
+    If the .year property of item "a" is smaller than "b", the method will subtract
+    one from the items ordered spot in the array, pushing it towards the end.*/
+    /* const oldestToYoungest = inventors.sort(function(a, b) {
+      if (a.year > b.year) {
+      return 1;
+      } else {
+        return -1;
+      }
+    }) */ /*The above commented out code is the long hand for the 
+    ternary expression below, which uses ? and : to evaluate statements. */
 
+    const oldestToYoungest = inventors.sort((a, b) => a.year > b.year ? 1 : -1);
+    console.table(oldestToYoungest);
+    
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    /* .reduce() is working by looping over an array and returning your "running
+    total" - not totally comprehending this.*/
+    const totalYears = inventors.reduce((total, inventor) => {
+      return total + (inventor.passed - inventor.year);
+    }, 0);
+    console.log(totalYears);
 
     // 5. Sort the inventors by years lived
-
+    const oldest = inventors.sort(function(a, b) {
+      const lastPerson = a.passed - a.year;
+      const nextPerson = b.passed - b.year;
+      return lastPerson > nextPerson ? -1 : 1;
+      /*if (lastPerson > nextPerson) {
+        return -1;
+      } else {
+        return 1;
+      } */
+    });
+    console.table(oldest);
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
 
+    //This exercise was completed in the console.
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const alpha = people.sort((lastOne, nextOne) => {
+      const [aLast, aFirst] = lastOne.split(", "); //This .split() method breaks up strings that share common characters, based on the text inside it's parentheses)
+      const [bLast, bFirst] = nextOne.split(", ");
+      return aLast > bLast ? 1 : -1;
+    })
+    console.log(alpha);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    //"obj" covers multiple instances of the same item, where as "item" includes multiples of the same thing
+    const transportation = data.reduce(function(obj, item) {
+     /* This says: "if obj[item] doesn't exist, then set it to 0".
+     I don't understand why you have to set it to 0, or even why
+     you put "item" in square brackets.*/
+      if(!obj[item]) {
+        obj[item] = 0;
+      }
+      obj[item]++; //incrementally increase
+      return obj;
+    }, {}); //You need to begin the loop with an empty object, which explains the {}
 
+    console.log(transportation);
   </script>
 </body>
 </html>
