@@ -71,8 +71,9 @@
     }
 
     /* BELOW: The "greater than" symbol here is referred to as an "angle bracket".
-    Mading the percentage -100% pushes the top <p> tags off the page.
-    Why does it affect the top <p>s and not the others? */
+    Making the percentage -100% pushes the top <p> tags off the page.
+    Why does it affect the top <p>s and not the others? Seems like you can add information
+    about which p to target using the *: selector? */
     .panel > *:first-child { transform: translateY(-100%); }
     /* BELOW: add the class of "open-active" (attaching with dot notation) so that when you apply
     it to a panel, the <p> tags animate into place -- accomplished by translateY(0) - this means
@@ -131,19 +132,20 @@
   </div>
 
   <script>
-    //Grab all of HTML elements with the class of "panel"
+    //Grab all of the HTML elements with the class of "panel"
     const panels = document.querySelectorAll('.panel');
 
     //Write a function that adds the class of "open" to each panel when it's clicked
     function toggleOpen() {
-      //What are we referencing with "this"?
+      //"this" below references the whole document object, since not otherwise specified.
       this.classList.toggle('open');
     }
     /* The reason you need to pass "e" as a parameter to the toggleActive function has
     something to do with how many "transitionend"s are happening at once on the page. If you don't specify
-    which event's ending to listen for, it won't work. So you pass "e" as a parameter, then write
+    which event's ending to listen for, it won't work. So you pass "e" as a parameter to the function, then write
     an if statement which tells the program what property name should signify the transitionend
-    we want to fire toggleActive. */
+    we want to fire toggleActive. In this instance, when the property that is changed includes the word
+    "flex", toggleActive is fired. */
     function toggleActive(e) {
       console.log(e.propertyName);
       
