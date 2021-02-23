@@ -15,7 +15,67 @@
     </ul>
   </form>
 <script>
+  //Put the cities JSON file URL into a variable named "endpoint"
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+//Create an empty cities array
+const cities = [];
+
+//Use the fetch API to get the endpoint variable data (URL to data above)
+//.then is called "against a promise" - what is a promise?
+/*When you first fetch the data, the computer doesn't know what TYPE of data it is,
+so you have to use the .json() method to translate the data. "blob" is a random word
+used to represent the console response from the fetch. */
+/*Finally, use an arrow function to push the API data into the cities variable.
+You will need to "spread" the data so that each item appears individually. ES6 feature. */
+fetch(endpoint)
+  .then(blob => blob.json())
+  .then(data => cities.push(...data))
+
+/* Write a function that intakes the word typed in the search bar ("wordToMatch")
+and the cities array data we'll need.*/
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => {
+                                          //'gi' flag stands for "global, insensitive"
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.city.match(regex) || place.state.match(regex)
+  });
+}
+//Following function copied from Stack Overflow simply to add commas to the population numbers
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function displayMatches() {
+  const matchArray = findMatches(this.value, cities);
+  const html = matchArray.map(place => {
+    //The next two lines exist to add a class of "hl", or highlight, to the characters that match the search bar's input
+    const regex =  new RegExp(this.value, 'gi');
+    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+    return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(place.population)}</span>
+      </li>
+    `;
+  }).join('');
+
+  /*This just makes the visible HTML for the element with the .suggestions class
+  appear as the VARIABLE html defined above, which is a function that maps over the
+  matchArray and returns search results based on what's been typed into the bar.
+  In English: if you type "Bos" into the search bar, any suggestions for search results
+  containing "Bos" will appear in your ".suggestions" div. */
+  suggestions.innerHTML = html;
+}
+//Create a variable for the "search bar", or HTML <input>
+const searchInput = document.querySelector('.search');
+//Create a variable for the <ul> which displays suggestions for your search
+const suggestions = document.querySelector('.suggestions');
+
+//Add an event listener to searchInput that fires displayMatches on 'change' or 'keyup' event;
+searchInput.addEventListener('change', displayMatches);
+searchInput.addEventListener('keyup', displayMatches);
 
 </script>
 </body>
