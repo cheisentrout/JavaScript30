@@ -15,10 +15,10 @@
     </ul>
   </form>
 <script>
-  //Put the cities JSON file URL into a variable named "endpoint"
+  //Put the cities JSON file URL into a variable named "endpoint":
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-//Create an empty cities array
+//Create an empty cities array:
 const cities = [];
 
 //Use the fetch API to get the endpoint variable data (URL to data above)
@@ -32,7 +32,7 @@ fetch(endpoint)
   .then(blob => blob.json())
   .then(data => cities.push(...data))
 
-/* Write a function that intakes the word typed in the search bar ("wordToMatch")
+/* Write a function that takes the parameters of the word typed in the search bar ("wordToMatch")
 and the cities array data we'll need.*/
 function findMatches(wordToMatch, cities) {
   return cities.filter(place => {
@@ -41,7 +41,7 @@ function findMatches(wordToMatch, cities) {
     return place.city.match(regex) || place.state.match(regex)
   });
 }
-//Following function copied from Stack Overflow simply to add commas to the population numbers
+//Following function was copied from Stack Overflow simply to add commas to the population numbers:
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
@@ -73,7 +73,7 @@ const searchInput = document.querySelector('.search');
 //Create a variable for the <ul> which displays suggestions for your search
 const suggestions = document.querySelector('.suggestions');
 
-//Add an event listener to searchInput that fires displayMatches on 'change' or 'keyup' event;
+//Add event listeners to searchInput that fire displayMatches on 'change' or 'keyup' event;
 searchInput.addEventListener('change', displayMatches);
 searchInput.addEventListener('keyup', displayMatches);
 

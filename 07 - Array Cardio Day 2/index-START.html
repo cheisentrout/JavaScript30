@@ -26,15 +26,54 @@
 
     // Some and Every Checks
     // Array.prototype.some() // is at least one person 19 or older?
+
+    /* Here's how you apply an array method to an array!
+    1. Create a variable that will store the results of the array check you're performing.
+        In this case, we want to know if anyone in the "people" array is an adult, so we
+        create a variable called "isAdult".
+    2. Using dot notation, assign your new variable to the array you want, and append the
+        aray method you want to use - in this case, .some(). .some() checks through an array
+        to see if at least one index item meets the conditions you specify within it.
+    3. An array method takes a function, so add the function keyword in its parentheses.
+    4. Inside the function's parentheses, create a new parameter based on what you want 
+        the function to return. In this case, we want a "person" returned who meets the
+        conditions of isAdult.
+    */
+   //Using "person" as a function paramenter - does this make "person" an object? We then attach properties to it throughout the function...
+    const isAdult = people.some(function(person) {
+      //Determine the age of the people in the people array by getting the current year, and subtracting their birth year from it inside an if statement.
+      const currentYear = (new Date()).getFullYear();
+      if(currentYear - person.year >= 19){
+        return true;
+      }
+    });
+
+    //Example of refactored code for "isAdult" below, using arrow functions and implicit returns!
+    /* const isAdult = people.some(person => (new Date()).getFullYear() - person.year >= 19; 
+    ); */
+
+    console.log({isAdult}); //adding curly braces around 'isAdult' allows you to see the name of the variable you're logging in the console, not just the value.
+
     // Array.prototype.every() // is everyone 19 or older?
+    const allAdults = people.every(person => (new Date()).getFullYear() - person.year >= 19);
+    console.log(allAdults);
 
     // Array.prototype.find()
     // Find is like filter, but instead returns just the one you are looking for
     // find the comment with the ID of 823423
 
-    // Array.prototype.findIndex()
+    //This statement will return a boolean using implicit return
+    const specComment = comments.find(comment => (comment.id === 823423));
+    console.log(specComment);
+
+    // Array.prototype.findIndex() - this will tell you what index number an item in an array is!
     // Find the comment with this ID
     // delete the comment with the ID of 823423
+
+    const indexNum = comments.findIndex(comment => (comment.id === 823423));
+    console.log(indexNum);
+
+    comments.splice(indexNum, 1);
 
   </script>
 </body>
