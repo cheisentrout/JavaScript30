@@ -7,6 +7,35 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+  //Get at the <canvas> tag in HTML and cache it!
+  const canvas = document.querySelector('#draw');
+  //You need to set a context for your canvas, using the .getContext() method. It takes '2d' or '3d'.
+  const ctx = canvas.getContext('2d');
+  /* We'll need to size up the canvas to fit the window width and height. We can do so by
+  appending the properties "height" and "width" to our canvas object, and setting it to equal the
+  "window.innerWidth" and "window.innerHeight"*/
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  /* BASE SETTINGS FOR LINE DRAWINGS: */
+  ctx.strokeStyle = '#BADA55';
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+
+  /*This variable exists so that we can assign the drawing function to fire only on the mousedown event. 
+  Currently, drawing is false because you don't want lines to appear when you simply move your mouse around.*/
+  let isDrawing = false;
+  /* lastX and lastY need to be defined because in order to draw a line, you need a starting point and an
+  ending point. */
+  let lastX = 0;
+  let lastY = 0;
+
+  function draw(e) {
+    console.log(e);
+  }
+  //TEST: add an event listener for 'mousedown' which fires the draw function -- at this point, just console.log()ging the event.
+  canvas.addEventListener('mousemove', draw);
+
 </script>
 
 <style>
