@@ -21,20 +21,56 @@
   ctx.strokeStyle = '#BADA55';
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
 
   /*This variable exists so that we can assign the drawing function to fire only on the mousedown event. 
   Currently, drawing is false because you don't want lines to appear when you simply move your mouse around.*/
   let isDrawing = false;
   /* lastX and lastY need to be defined because in order to draw a line, you need a starting point and an
-  ending point. */
+  ending point. These variables will need to be updated at the end of our draw function, so that our lines
+  don't always have to originate from 0!*/
   let lastX = 0;
   let lastY = 0;
+  let hue = 0;
+  let direction = true;
 
   function draw(e) {
+    if(!isDrawing) return; //This stops the function from running when mousedown is not true
     console.log(e);
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.offsetX, e.offsetY); //Revisit this - I don't know how to translate it or why it works.
+    ctx.stroke();
+    //Now add the code that updates lastX and lastY
+    [lastX, lastY] = [e.offsetX, e.offsetY]; //New fun ES6 syntax! "Destructuring arrays"
+    hue++; //This incrementally increases the hue value while you draw a line - give the rainbow effect!
+    if(hue >= 360) {
+      hue = 0;
+    } //That just says, "when the hue value reaches 360, reset it to 0"
+    if(ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+      direction = !direction; //This stops the line width from getting bigger indefinitely.
+    }
+    if(direction) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    }
   }
-  //TEST: add an event listener for 'mousedown' which fires the draw function -- at this point, just console.log()ging the event.
+  /*The function triggered by 'mousedown' allows new lines to start without all being connected,
+  because you have to update lastX and lastY before you can start moving your mouse - first, you have
+  to click down.*/
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  })
+ 
   canvas.addEventListener('mousemove', draw);
+  //Write an inline arrow function that is triggered by an event, that updates the value of "isDrawing" 
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseout', () => isDrawing = false); //"mouseout" is when your mouse leaves the browser window
+
+
 
 </script>
 
