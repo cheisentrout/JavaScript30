@@ -18,28 +18,67 @@
     }
 
     // Regular
+    console.log('hello');
 
-    // Interpolated
+    // Interpolated: ways of replacing placeholders with values in a string literal
+        /* EXAMPLE:
+            function myInfo(fname, lname, country) { 
+                return `My name is ${fname} ${lname}. ${country} is my favorite country`;  
+            } 
+            console.log(myInfo("john", "doe", "India")); RETURNS "My name is john doe. India is my favorite country"
+            */
+    const testing = 'test';
+    console.log('Hello I am an %s string!', 'elegant');
+    console.log(`Hello I am a ${testing}`);
 
-    // Styled
+    // Styled - precede you string with "%c" in the first argument, then in the second, you can specify style values.
+    console.log('%c I am some beautiful styled text', 'color: #EB4B7E; font-size: 22px;')
 
     // warning!
+    console.warn('Look out!');
 
     // Error :|
+    console.error('That ain\'t it.');
 
     // Info
+    console.info('Here\'s some important information.'); //This didn't work for me - it appeared as a regular console.log
 
-    // Testing
+    // Testing - .assert only fires if the first argument is false. If so, it display the second string argument!
+    console.assert(2 === 3, 'That is wrong!');
 
     // clearing
+    //console.clear(); - clears your console completely
 
     // Viewing DOM Elements
+    const p = document.querySelector('p');
+    console.log(p);
+    console.dir(p); //This provides a dropdown menu for all the properties and class of the <p>
 
-    // Grouping together
+    /* Grouping together - allows you to group info in your console, defined by an opening .group 
+    statement, and closed by a .groupEnd statement which states the same opening code.*/
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`); //Group open
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old.`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old.`);
+      console.groupEnd(`${dog.name}`); //Group close
+    })
 
     // counting
+    console.count('Clare');
+    console.count('Clare');
+    console.count('Clare');
 
-    // timing
+    // timing - allows you to see how long it takes for a given operation to execute
+    console.time('fetching data');
+    fetch('https://api.github.com/users/wesbos')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetching data');
+        console.log(data);
+      })
+
+
 
   </script>
 </body>
