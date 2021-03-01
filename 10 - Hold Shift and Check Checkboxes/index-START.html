@@ -96,6 +96,47 @@
   </div>
 
 <script>
+  /* FIRST: select all of the checkboxes so that we can listen for when they
+  are checked, and we have them all in one group which we can loop over.*/
+  
+  //This query selector syntax was unfamiliar to me - using a class, the HTML tag, and the "type" to get at the checkboxes.
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+  // console.log(checkboxes); - at this point, all input boxes returned as a node list.
+  
+  //THEN, listen for when one of the checkboxes gets clicked or changed, by LOOPING OVER EACH ONE and adding an event listener.
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
+  
+  //NEXT, We'll assign variables for the last checked box so that when we click one below it, we can refer to the area in between them.
+  let lastChecked;
+
+  //THEN, write the handleCheck function.
+  function handleCheck(e) {
+    let inBetween = false;
+    //Check to see if the user held the shift key down
+    //Make sure the box is being CHECKED, and not unchecked (also handled by a 'click')
+    if (e.shiftKey && this.checked) {
+      /* We're going to sort through the inputs by looping over them. The first one we'll note
+      is the first checked item on the list. We'll save it, and as we continue to loop over the list,
+      we'll select the inputs following the first checked. The next item will look for and save is the
+      LAST checked item. Once we've noted that, we will stop selecting items that follow it.*/
+      checkboxes.forEach(checkbox => {
+        console.log(checkbox);
+        /* Below, we are checking to see if the checkbox (sort of like the "object" for this function?)
+        is equal to itself (but I don't understand why) or if the checkbox is equal to the lastChecked
+        box. If so, we're saying that the inBetween variable is equal to it's opposite... which I also don't
+        understand.*/
+        if(checkbox === this || checkbox === lastChecked) {
+          inBetween = !inBetween;
+          console.log("These ones are the bookends!");
+        }
+        //Write an if statement that checks if "inBetween" is true, and if so, applies the .checked property to the item.
+        if(inBetween) {
+          checkbox.checked = true;
+        }
+      })
+    }
+    lastChecked = this;
+  }
 </script>
 </body>
 </html>
