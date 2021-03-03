@@ -2,10 +2,11 @@
 const player = document.querySelector('.player');
 const video = player.querySelector('.viewer');
 const progress = player.querySelector('.progress');
-const progFill = player.querySelector('.progress_filled');
+const progressBar = player.querySelector('.progress__filled');
 const toggle = player.querySelector('.toggle'); //play btn
 const skipBtns = player.querySelectorAll('[data-skip]'); //10s skip, 25s skip
-const ranges = player.querySelectorAll('.player_slider'); //volume and vid speed
+const ranges = player.querySelectorAll('.player__slider'); //volume and vid speed
+const fullscreenBtn = player.querySelector('.full-screen');
 
 /* Build out the functions. */
 /* togglePlay could be written as the following:
@@ -26,21 +27,59 @@ function updateButton() {
 
 function skip() {
     console.log(this.dataset.skip); //where did "dataset" come from?
-    video.currentTime += parseFloat(this.dataset.skip); //"parseFloat" returns an actual time... I think.
+    video.currentTime += parseFloat(this.dataset.skip); //"parseFloat" converts a string into a true number... I think.
 }
 
 function handleRangeUpdate() {
-    console.log(this.value);
+    video[this.name] = this.value; //this says: for the video object, attach the range.volume (or range.playBack) and set it to equal that range's VALUE - which is either volume/speed increase/decrease
+  }
+
+function handleProgress() {
+    const percent = (video.currentTime / video.duration) * 100;
+    progressBar.style.flexBasis = `${percent}%`; /* This function divides the video's current time (how much time it's played for)
+    by it's full duration, then multiplies that number by 100 to return a percentage - this percentage is how much of the video has been
+    played. Then, we update the progress bar's flex basis using dot notation to equal the changing percent variable, which we will set to
+    update as the video plays using an event listener below. */
 }
 
+function scrub(e) {
+    /* To write this function, note the full width of the progress bar you want to update. In this case, it's 640px. So, if we clicked
+    320px of the way through the progress bar, we know that we'd want the video to "scrub" to 50%. */
+    const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+    video.currentTime = scrubTime;
+}
+//Fullscreen function to be added at a later date!
+/* function openFullscreen() {
+    if (fullscreenBtn.requestFullscreen) {
+        fullscreenBtn.requestFullscreen();
+    } else if (fullscreenBtn.webkitRequestFullscreen) {
+        fullscreenBtn.webkitRequestFullscreen();
+    } else if (fullscreenBtn.msRequestFullscreen) {
+        fullscreenBtn.msRequestFullscreen();
+    }
+}; */
 
 /* Hook up the event listeners */
 video.addEventListener('click', togglePlay);
 video.addEventListener('play', updateButton); //This triggers 'play' or 'pause' on click, AND runs updateButton. Why does the exact same syntax allow us to use a method, when just a line above, it was listening for a keyboard/mouse event?
 video.addEventListener('pause', updateButton);
+video.addEventListener('timeupdate', handleProgress);
+
 toggle.addEventListener('click', togglePlay);
+
 skipBtns.forEach(button => button.addEventListener('click', skip));
 ranges.forEach(range => range.addEventListener('change', handleRangeUpdate));
+ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate));
+
+let mousedown = false;
+progress.addEventListener('click', scrub);
+progress.addEventListener('mousemove', (e) => mousedown && scrub(e));
+progress.addEventListener('mousedown', () => mousedown = true);
+progress.addEventListener('mouseup', () => mousedown = false);
+/* The above function provides information about about how to scrub the video bsaed on a user dragging the mouse from one spot to another,
+rather than clicking in a new spot. */
+
+// fullscreenBtn.addEventListener('click', openFullscreen);
 
 
 /* First - get our elements. */
