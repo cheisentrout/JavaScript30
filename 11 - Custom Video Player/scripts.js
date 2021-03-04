@@ -45,6 +45,7 @@ function handleProgress() {
 function scrub(e) {
     /* To write this function, note the full width of the progress bar you want to update. In this case, it's 640px. So, if we clicked
     320px of the way through the progress bar, we know that we'd want the video to "scrub" to 50%. */
+    console.log(e);
     const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
     video.currentTime = scrubTime;
 }
