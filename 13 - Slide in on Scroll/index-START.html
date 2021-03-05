@@ -43,7 +43,7 @@
   </div>
 
   <script>
-    function debounce(func, wait = 20, immediate = true) {
+    function debounce(func, wait = 20, immediate = true) { //Wrap this function around any fn triggered by a scroll event!
       var timeout;
       return function() {
         var context = this, args = arguments;
@@ -58,7 +58,65 @@
       };
     }
 
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide(e) {
+      sliderImages.forEach(sliderImage => {
+       //Do some math to determine how far the window has scrolled
+        const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 4;
+        /* In line of code above, we're storing browser information in a variable called "slideInAt". Specifically,
+        we are adding the .scrollY pixel amount (the distance in pixels that you've scrolled from
+        the top of the page to your current position) to the .innerHeight of the viewable browser. So if we'd scrolled 120px
+        down according to scrollY, and the innerHeight of the browser was 350px, our slideInAt var
+        would store 470px. However, we want the image to start entering the frame at about halfway
+        through it's height, so we subtract the value of slideImage.height (halved). */ 
+        const imageBottom = sliderImage.offsetTop + sliderImage.height;
+        /* ABOVE: "calculate the distance of the slider image from the top of the window, then add
+        the image's height to that value, in order to determine the px value of the bottom of the image.*/
+        const isHalfShown = slideInAt > sliderImage.offsetTop;
+        /* ABOVE: "take the value from the slideInAt variable and check that it's larger than the
+        distance of the image from the top of the page.*/
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        /* ABOVE: "create a variable that checks if the window.scrollY value is less than the image bottom.
+        AKA: is our current scroll position past the bottom of the image div?*/
+        if (isHalfShown && isNotScrolledPast) {
+          sliderImage.classList.add('active'); //If we can see at least half of the image div, and we haven't scrolled past it, apply the active class styles!
+        } else {
+          sliderImage.classList.remove('active'); 
+        }
+      });
+    }
+    window.addEventListener('scroll', debounce(checkSlide));
+
+
   </script>
+
+<!-- JS PSEUDOCODE 
+First, we'll want to cache the DOM and grab the photo elements that are meant to slide in.
+  const rightPhotos = document.querySelectorAll(".align-right");
+  const leftPhotos = document.querySelectorAll(".align-left");
+
+  Add a window.addEventListener to listen for scroll and trigger "handleSlide"
+  window.addEventListener('scroll', handleSlide);
+
+  Apply a new class (of CSS styles) that will slide the image in when the event listener triggers
+  that function. This must also include REMOVING the styles (sliding images out) when the window
+  is not on it.
+    function handleSlideIn() {
+      rightPhotos.forEach(photo => photo.style. //append new CSS style class)
+      leftPhotos.... same
+    }
+  
+    function slideOut() {
+      if / else statement?
+    }
+
+    Steps I missed:
+
+    calculating the position of hte image <div> related to the window position. We needed
+      a LOT of those values to determine when (or really, WHERE), our scroll events should occur.
+  
+-->
 
   <style>
     html {
@@ -101,7 +159,7 @@
 
     .slide-in {
       opacity: 0;
-      transition: all .5s;
+      transition: all 1s;
     }
 
     .align-left.slide-in {
