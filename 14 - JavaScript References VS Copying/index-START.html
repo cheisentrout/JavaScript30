@@ -8,15 +8,32 @@
 
   <script>
     // start with strings, numbers and booleans
-
+      let age = 100;
+      let age2 = age;
+      console.log(age, age2); //output: 100 100
+      age2 = 200;
+      console.log(age, age2); //output: 100 200
+      /* We begin by setting "age" to 100, then we create a variable 
+      called "age2" that stores the value of "age". If we log the values of
+      both variables, we get identical numbers. If we continue down the program
+      and edit the value of "age2", and log the two variables again (age, age2),
+      age2 will change without affecting the value of its reference, "age". */
+    
     // Let's say we have an array
     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
 
     // and we want to make a copy of it.
+    const team = players;
 
+    console.log(players, team); //output: ["Wes", "Sarah", "Ryan", "Poppy"] ["Wes", "Sarah", "Ryan", "Poppy"]
     // You might think we can just do something like this:
+      //team[3] = "Lux"; 
 
     // however what happens when we update that array?
+      //we get an output of ["Wes", "Sarah", "Ryan", "Lux"] for both "players" and "team"
+      /* This is because the "team" variable is a REFERENCE to the "players" array. 
+      Although you can use this strategy with numbers, booleans, and strings to update
+      variables, it will mutate an original array rather than creating a new copy you can tweak. */
 
     // now here is the problem!
 
@@ -25,31 +42,70 @@
     // Why? It's because that is an array reference, not an array copy. They both point to the same array!
 
     // So, how do we fix this? We take a copy instead!
-
+    const team2 = players.slice();
+    
     // one way
 
     // or create a new array and concat the old one in
-
+    const team3 = [].concat(players);
+    
     // or use the new ES6 Spread
-
+    const team4 = [...players]; //This takes each element out of the players array and "spreads" them into a new array
+    team4[3] = "Madison"; 
+    console.log(team4)//output: ['Wes', 'Sarah', 'Ryan', 'Madison'] -- does NOT change the "players" array!
+    
+    const team5 = Array.from(players);
+    team5[3] = "Stony";
+    console.log(team5); //output: ['Wes', 'Sarah', 'Ryan', 'Stony'] -- again, does NOT change "players" array!
     // now when we update it, the original one isn't changed
 
     // The same thing goes for objects, let's say we have a person object
 
     // with Objects
-    const person = {
-      name: 'Wes Bos',
-      age: 80
-    };
+    const blizzard = {
+      size: 'medium',
+      flavor: 'vanilla'
+    }
+
+    const withCandy = Object.assign({}, blizzard, { candy: 'm&ms' });
+    console.log(withCandy);
+    /* ABOVE: create a new variable to store your copied object with added properties.
+    Call Object.assign(). Within its parentheses, put an empty pair of curly braces, the
+    object you're creating an instance of, and within another set of curly braces, add the
+    key-value pairs for your object instance. */
+
 
     // and think we make a copy:
+
 
     // how do we take a copy instead?
 
     // We will hopefully soon see the object ...spread
 
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+      const clare = {
+        name: 'Clare',
+        age: 30,
+        student: true,
+        faveFoods: {
+          breakfast: 'smoothie',
+          lunch: 'leftovers',
+          dinner: 'squash soup'
+        }
+      };
 
+      const grumpy = Object.assign({}, clare);
+      grumpy.faveFoods.breakfast = 'chocolate';
+      grumpy.faveFoods.lunch = 'cheez-its';
+      grumpy.faveFoods.dinner = 'macaroni & cheese'; /* SURPRISE! This mutates the original
+      "clare" object, because Object.assign() is "shallow", and can only address the first
+      level of properties within an object. You could edit name, age, and student in grumpy
+      without mutating the OG object, but not the second level of prorpeties in faveFoods.
+
+      apparently using JSON.parse(JSON.stringify(clare)) is an option to turn "clare" into a string,
+      then immediately back into an object copy which you can edit all levels of without affecting
+      "clare".
+      
   </script>
 
 </body>
