@@ -26,11 +26,84 @@
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  const addItems = document.querySelector('.add-items'); //HTML form
+  const itemsList = document.querySelector('.plates'); //list of added items
+  const items = JSON.parse(localStorage.getItem('items')) || []; /*This is one way to use local storage to keep user input in a window 
+  even on refresh. It says "check the local storage for this site, and use that first. If it doesn't exist, use an empty array." */
+
+  /* What's happening here when we begin, is that every time you add an item
+  through the form, the page is refreshing. It is the default state of a web form
+  to refresh the page, or send the entered data to an external source. To prevent
+  this refresh, we will use e.preventDefault(). */
+  function addItem(e) {
+    e.preventDefault();
+    const text = (this.querySelector('[name=item]')).value; //To get at an HTML element's attributes that aren't classes or IDs, enclose in quotations and square brackets?
+    /* BELOW: This didn't initially occur to me, but in order to add the items to our array,
+    we'll need to create an object for those items that will be added. */
+    const item = {
+      text, //variable which we set above, ES6 shorthand for key-value pair text: text,
+      done: false, //default to unchecked
+    };
+
+    items.push(item); //push each item into the items array!
+    populateList(items, itemsList); //call the populateList function with the parameters of the items array, and the itemsList HTML destination (where the array elements will show up on the page)
+    localStorage.setItem('items', JSON.stringify(items)); //
+    this.reset(); //"This" refers to the form element, which has a built-in property of "reset()".
+    // you can console.log(this); if you have any uncertainty about what "this" is getting at.
+  };
+  //Write a function that will make the user's input appear in the list - this function will be called INSIDE of "addItems"
+  //Give it parameters of an empty array called "plates", and a variable to represent where the info appears in HTML (platesList) -- in our project, we'll pass it the itemsList var
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+      /*BELOW: something about using the id of "items${i}" on the checkbox and the label "for" attribute "items${i}" on the item text connects the two, 
+      but I don't fully track this. We can include a ternary operator inside the <input> HTML tag which checks whether
+      the variable "done" evaluates to true for each checkbox. All of the added items should default to false, or "not done", unless manually changed.
+      */
+      return `
+        <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `;
+    }).join('');
+  }
+
+  function toggleDone(e) {
+    if (!e.target.matches('input')) return; /* only apply the following functionality IF the target of the event 
+    matches the string 'input'... (but why begin with a ! ?) */
+    const el = e.target;
+    const index = el.dataset.index;
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList)
+  };
+
+
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+  populateList(items, itemsList);
+
+
+/* PSEUDOCODE!
+
+We'll need to:
+
+Add an event listener to the "add item" button.
+The function triggered by that click should push the user's input into
+an empty items array and store it there, even when you refresh the page.
+
+We'll need an event listener for each item added to the items array.
+The function triggered by clicking on each item should toggle
+on and off the check (or in this project, taco) box. This status
+should also be stored regardless of page refresh.
+
+
+*/
+
 
 </script>
+
+
 
 
 </body>
