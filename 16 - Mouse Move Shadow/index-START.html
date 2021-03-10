@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>Mouse Shadow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <div class="hero">
-    <h1 contenteditable>🔥WOAH!</h1>
+    <h1 contenteditable>shady</h1> 
   </div>
 
   <style>
   html {
     color: black;
-    font-family: sans-serif;
+    font-family: 'bebas neue';
   }
 
   body {
@@ -25,7 +26,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: black;
+    color:#00E3AD;
   }
 
   h1 {
@@ -35,6 +36,74 @@
   </style>
 
 <script>
+  /* Functionality we'll need to complete this project:
+  - Duplicate the h1 text
+  - Apply different colors to the mobile h1s
+  - Create motion ranges for the moving h1s
+  - Make sure the h1s freeze in place when we move our mouse off the page, 
+    and pick up where we left off when we move it back on.
+  - Colors of the h1s will need transparency when they intersect with one another.
+  */
+
+  const hero = document.querySelector(".hero");
+  const text = document.querySelector("h1");
+
+  const walk = 300; //"walk" is the term used to describe the range of motion for the shadows, here in pixels.
+
+  function shadow(e) {
+    const width = hero.offsetWidth; /*First, get the dimensions of the element 
+    we're listening for an event on. (Measure the width and height of our <div> with the .hero class.)*/
+    const height = hero.offsetHeight;
+    //Following line written in ES6 shorthand syntax:
+    let { offsetX: x, offsetY: y } = e; /*This would be like writing "let x = e.offsetX, 
+    let y = e.offsetY" in longhand. Basically, we want to use the data from the mousemove
+    event (specifically the "position" properties of offsetX and Y) to note where our mouse
+    is on the page.*/
+    
+    /* BELOW: we need the following code block because currently, we're listening for mousemove
+    on the hero div - but the div's child elements will log their own values of x and y (AKA, the
+    top left corner of the h1 will have small x/y values just like the top left corner of the
+    div does.) So, we need to add the values of the event's x and y values to any element that isn't
+    our target (the div). */
+    if (this !== e.target) {
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+    }
+
+    console.log(this);
+    console.log(e.target);
+    
+    const xWalk = Math.round((x / width * walk) - (walk / 2));
+    const yWalk = Math.round((y / height * walk) - (walk / 2));
+    /* This equation says: "divide the x value of the mouse event by the width of the hero element,
+    and multiply that number by the walk range (100px). Then, subtract the walk range divied by 2 -
+    this will be 50". This is because, although our walk range is 100px total, that means we want the
+    option to go either 50px forward, or 50px BACKWARDS. We don't just want the shadow to move towards
+    the bottom right, we want it to have the option to flex 50px foward and 50px backward, for a range of
+    -50 - +50, or 100px of movement range total. */
+    
+    /* the syntax of the textShadow property value
+    is written as: "horizontal px, vertical px*/
+    text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 #FFB6E9,
+      ${xWalk * -1}px ${yWalk}px 0 #E37800,
+      ${yWalk}px ${xWalk * -1}px 0 #1A00FB,
+      ${yWalk * -1}px ${xWalk}px 0 #CEFA0C`;
+  };
+
+  hero.addEventListener('mousemove', shadow);
+
+
+
+
+
+
+
+
+
+
+
+ 
 </script>
 </body>
 </html>
