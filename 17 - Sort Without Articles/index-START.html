@@ -22,7 +22,7 @@
       font-size: 20px;
       background: white;
       width: 500px;
-      margin: auto;
+      margin: 50px auto;
       padding: 0;
       box-shadow: 0 0 0 20px rgba(0, 0, 0, 0.05);
     }
@@ -48,6 +48,60 @@
 <script>
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
 
+const list = document.getElementById('bands');
+
+function strip(bandName) {
+  return bandName.replace(/^(a |an |the )/i, '').trim(); /* REGEXP alert!! This code says: "look through
+  each bandName string for "a " "an " or "the " (making sure to include the spaces so "any" or "them" for example
+  doesn't get caught up in it), and if you find it REGARDLESS of the case ("i" makes the search case insensitive)
+  replace it with '' (nothing). Tack on .trim() to remove any excess spaces left behind. */
+}
+
+/* You can then use your strip function on the variables passed to your .sort() comparison function! AKA: whatever
+is passed to compare, it will be stripped of it's articles WITHOUT altering the original array data. */
+
+//Sort the array and store the result in a new variable "sortedBands".
+//.sort() takes a comparison function with two parameter values - a and b. You'll compare to see which is "bigger".
+const sortedBands = bands.sort(function (a, b) {
+  // Ternary operator shorthand for the .sort() comparison function:
+  return strip(a) > strip(b) ? 1 : -1;
+  // if (strip(a) > strip(b)) {
+  //   return 1; //If a > b, move it to the top by "adding a positive value"
+  // } else {
+  //   return -1; //Otherwise, move it to the bottom by "adding a negative value"
+  // }
+});
+
+list.innerHTML = sortedBands.map(band => `<li>${band}</li>`).join('');
+
+console.log(sortedBands);
+
+
+/* PSEUDOCODE 
+
+The array.sort() method defaults to returning an array sorted alphabetically, from A-Z. The trick
+about today's project is that we want to omit any articles (the, an, a) from the band names.
+
+- remove articles
+    function remArticles() {
+      bands.forEach(band => {
+    if (band[0] === 'The' || band[0] === "A" || band[0] === 'An') {
+      return band[1]; //But would this return the second character, and not the second word? Might work only for "a"...
+    } else {
+      return band[0];
+    }
+  })
+};
+
+//At this point, my above pseudocode might have permanently altered the bands array, which isn't what we want.
+
+- sort the array
+    bands.sort(compare function?? a, b)
+
+- create an <li> for each sorted item and display them in the HTML by appending them as children to the <ul>
+    const listItem = document.createElement()
+    list.appendChild(listItem);
+*/
 
 </script>
 
