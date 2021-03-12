@@ -44,6 +44,7 @@
   </style>
 
   <ul id="bands"></ul>
+  <ul id="movies"></ul>
 
 <script>
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
@@ -77,9 +78,9 @@ list.innerHTML = sortedBands.map(band => `<li>${band}</li>`).join('');
 console.log(sortedBands);
 
 
-/* PSEUDOCODE 
+/* PSEUDOCODE - thinking through the problem prior to watching the tutorial!
 
-The array.sort() method defaults to returning an array sorted alphabetically, from A-Z. The trick
+The array.sort() method defaults to return an array of strings sorted alphabetically, from A-Z. The trick
 about today's project is that we want to omit any articles (the, an, a) from the band names.
 
 - remove articles

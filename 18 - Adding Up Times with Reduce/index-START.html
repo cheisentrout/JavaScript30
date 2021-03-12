@@ -182,6 +182,53 @@
     </li>
   </ul>
 <script>
+//Create an array from all of the HTML elements with the attribute of "data-time".
+const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
+//Create a variable that represents the value of the data-time attributes for each array element ("6:53", etc.).
+const seconds = timeNodes
+    .map(node => node.dataset.time) //Resource for working with .dataset: https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/dataset
+    .map(timeCode => {
+      const [mins, secs] = timeCode.split(':').map(parseFloat); /* Split up times written as strings by
+      dividing them on the semicolon, which will create an array of two separate strings - ["6", "53"] */
+      return (mins * 60) + secs;
+      console.log(mins, secs);
+    })
+    .reduce((total, vidSeconds) => total + vidSeconds) //arrow function and implicit return used here!!
+
+    let secondsLeft = seconds;
+    const hours = Math.floor(secondsLeft / 3600);
+    secondsLeft = secondsLeft % 3600; //Use mod, or "%", to return the REMAINDER VALUE of dividing secondsLeft by 3600
+
+    const mins = Math.floor(secondsLeft / 60);
+    secondsLeft = secondsLeft % 60;
+    console.log(hours, mins, secondsLeft);
+
+
+
+/* Thinking it through:
+
+We want to: extract the data-time values from each li (store them in a JS var), convert them into numbers,
+tally them up using .reduce().
+
+We might have to do something that says "if minutes >= 60, minutes = 0"... and then specify how to add
+hours. Same goes for seconds.
+
+const times = document.querySelectorAll('[data-time]');
+const totalRunTime = '';
+
+function toString() {
+  times.forEach(time => {
+    JSON.stringify();
+  })
+  return time;
+};
+
+console.log(toString(times));
+
+Return just the numbers with a regex?
+
+*/
+
 </script>
 </body>
 </html>
