@@ -55,6 +55,25 @@
 
 <script>
 
+  const nav = document.querySelector('#main');
+  const topOfNav = nav.offsetTop;
+
+  function fixNav() {
+    //You can check the value of topOfNav, and the distance scrolled by using: console.log(topOfNav, window.scrollY);
+    if(window.scrollY >= topOfNav) {
+      document.body.style.paddingTop = nav.offsetHeight + 'px'; /* This adds padding to the body
+      once the nav is fixed, so that the nav doesn't cover or distort the spacing of the rest of the
+      page. It says "append the amount of padding that is equal to the height of the nav, in pixels." */
+      document.body.classList.add('fixed-nav');
+    } else {
+      document.body.style.paddingTop = 0; /* Note: in an if/else statement like this, make sure in your "else"
+      state, you're removing every property that you added in your "if". */
+      document.body.classList.remove('fixed-nav');
+    }
+  };
+
+  window.addEventListener('scroll', fixNav); 
+
 </script>
 
 </body>

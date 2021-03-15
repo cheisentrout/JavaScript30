@@ -25,6 +25,10 @@ body {
   transition: transform 0.5s;
 }
 
+.fixed-nav .site-wrap {
+  transform: scale(1);
+}
+
 header {
   text-align: center;
   height: 50vh;
@@ -39,6 +43,10 @@ h1 {
   color: white;
   font-size: 7vw;
   text-shadow: 3px 4px 0 rgba(0,0,0,0.2);
+}
+
+.fixed-nav nav {
+  position: fixed;
 }
 
 nav {
@@ -63,6 +71,10 @@ nav li {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.fixed-nav li.logo {
+  max-width: 500px;
 }
 
 li.logo {
