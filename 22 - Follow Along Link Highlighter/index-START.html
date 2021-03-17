@@ -9,7 +9,7 @@
 
     <nav>
       <ul class="menu">
-        <li><a href="">Home</a></li>
+        <li id='test'><a href="">Home</a></li>
         <li><a href="">Order Status</a></li>
         <li><a href="">Tweets</a></li>
         <li><a href="">Read Our History</a></li>
@@ -26,7 +26,82 @@
     </div>
 
   <script>
-    // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+
+   //get all of the links from the DOM
+    const triggers = document.querySelectorAll('a');
+    //create a <span> DOM element to which you can append the highlight class - 
+    const highlight = document.createElement('span');
+    highlight.classList.add('highlight');
+    document.body.appendChild(highlight);
+
+    /* At this poing in the program, the "highlight" exists as a span element
+    with the class of .hightlight. Now, we need to make the span element inherit the dimensions
+    of whichever link it appears with. */
+
+    function highlightLink() {
+      /* Use .getBoundingClientRect() method to retrieve the dimensions of the DOM element 
+      you want the highlight span to match.  */
+      console.log(this); //"this" refers to whichever link you're hovering over, since the function is called on a DOM element that represents all the links.
+      const linkCoords = this.getBoundingClientRect();
+      console.log(linkCoords);
+      /* Write the following "coords" object because otherwise, the highlight can't account for the
+      amount you've scrolled down or right. (So we address top/left using scrollY/scrollX.) */
+      const coords = { //An object at work in the wild!! Written in key-value pairs.
+        width: linkCoords.width,
+        height: linkCoords.height,
+        top: linkCoords.top + window.scrollY,
+        left: linkCoords.left + window.scrollX
+      };
+      /* Append the width, height, and position CSS properties to the highlight element.
+      Set them to equal the object (coords) containing the information about the position of
+      the links. */
+      highlight.style.width = `${coords.width}px`; 
+      highlight.style.height = `${coords.height}px`;
+      highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+    }
+
+    //Seems like you can indeed use the forEach method on a Node list, and add an event listener to each Node therein.
+    triggers.forEach(a => a.addEventListener('mouseenter', highlightLink));
+
+    
+    /* Thinking it through!
+    
+    Project objectives:
+    - add a CSS class to elements when they're hovered over (mouse over)
+        - the CSS class should add a white background with curved edges
+        - since it's applied to different elements, it should stretch or shrink 
+          to fit whichever element's background it's applied to.
+    
+    - However, the white "background" does not disappear entirely when you move
+    your mouse away from an element.
+        - if you don't move your mouse to a different link, the last link you hovered over
+        remains highlighted.
+        - if you move your mouse from one link to another, the white background quickly
+        follows along, visibly. It never disappears. This makes me wonder about the logic
+        of simply applying a CSS class.
+
+    - In the finished file, you can see that each time you hover over a link,
+    a "DOMRect" is logged to the console.
+
+    Attempt:
+
+const triggers = Array.from(document.querySelectorAll('a'));
+
+console.log(triggers);
+
+function highlight() {
+  triggers.forEach(trigger => trigger.classList.add('lit'));
+}
+
+function addClass() {
+  triggers.forEach(trigger => 
+  trigger.addEventListener('mouseover', highlight));
+};
+
+addClass();
+    */
+
+
   </script>
 </body>
 </html>
